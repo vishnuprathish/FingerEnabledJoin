@@ -22,9 +22,9 @@ class file:
 
 
 
-	#stats  size,columns,runs,pkey,max,range
+	#stats  size,columns,runs,fingers,pkey,max,range
 
-	#stats=(size,columns,runs,pkey,max,range)
+	#stats=(size,columns,runs,fingers,pkey,max,range)
 	stats={}
 
 	def setStats(self,size,columns,runs,fingers,pkey,max):   #set the status values 
@@ -48,30 +48,68 @@ class file:
 		return self.data[str(col)][idx]
 
 
-	def getFirst(self):
+	def getFirst(self,col):
 		tuple1 =[]
 		for col in range(self.stats["columns"]):
 			tuple1.append(self.data[str(col)][0])
+
+		self.stats["fingers"][col]=0
 
 		return tuple1
 		pass
 
 	def getNext(self,col):
 		fingerPos=self.stats["fingers"][col]
-		print fingerPos
+		print str(fingerPos) + "-"
+
+		
+		if self.stats["fingers"][col]!=-1 :
+			self.stats["fingers"][col]+=1
+
+		print self.stats["fingers"][col]
+		print str(self.stats["size"]) + " yy"
+
+		if fingerPos>=len(self.data[str(0)])-1:
+			#self.stats["fingers"][col]=0
+			return None
 
 		tuple1 =[]
 		for col in range(self.stats["columns"]):
 			tuple1.append(self.data[str(col)][fingerPos])
 
 
-		if self.stats["fingers"][col]!=-1 :
-			self.stats["fingers"][col]+=1
+		
 
 		return tuple1
+		pass
 
+	def emit(self,x):
+		print "yo"
+		print x
+
+	def eJoin(self,S,m,n):
+		t1=self.getFirst(m)
+		t2=S.getFirst(n)
+
+		while t1 is not None:
+			print str(t1[m]) + "=" + str(t2[n])
+			
+			#print "x"
+
+			while t2 is not None:
+				print str(t1[m]) + "=" + str(t2[n])
+				if t1[m]==t2[n]:
+					self.emit((t1,t2))
+				t2=S.getNext(n)
+
+			t1=self.getNext(m)
+			
+			print str(t1) + "xx"
+			#if t2==None:
+			t2=S.getFirst(n)
 
 		pass
+
 
 
 	def __init__(self):
@@ -173,7 +211,7 @@ class file:
 
 #Generate(3,[3,3,3],9)
 
-inst= file()
+"""inst= file()
 if len(sys.argv)>1:
 	cols = int(sys.argv[1])
 	runs = [int(x) for x in sys.argv[2:(len(sys.argv)-1)]]
@@ -186,22 +224,27 @@ if len(sys.argv)>1:
 	inst.setConstraints(0,200000)
 	inst.Generate(cols,runs,size)
 	inst.write2File("file.txt")
+
+	"""
 #inst2=file()
 #inst2.readFile("file.txt")
 #print inst2
 
 inst3=file()
-inst3.setStats(10,2,(2,3),[-1,0],0,20)
+inst3.setStats(10,2,(2,3),[-1,0],0,30)
 inst3.FormData()
 
 
 inst4=file()
-inst4.setStats(10,2,(2,3),[-1,0],0,20)
+inst4.setStats(20,2,(2,3),[-1,0],0,30)
 inst4.FormData()
 
-
 print inst3
+print inst4
 
+inst3.eJoin(inst4,1,1)
+
+"""
 inst3.printStats()
 
 print inst3.getFirst()
@@ -210,7 +253,7 @@ print inst3.getNext(1)
 print inst3.getNext(1)
 print inst3.getNext(1)
 print inst3.getNext(1)
-print inst3.getNext(1)
+print inst3.getNext(1)"""
 
 
 
