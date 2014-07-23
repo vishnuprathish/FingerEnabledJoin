@@ -1,7 +1,15 @@
 import random
 import sys
+#import file
 
-"""class schema:
+#print file.__file__
+
+
+
+
+
+
+class schema:
 
 	files=[]
 
@@ -12,29 +20,26 @@ import sys
 		self.files.append(file)
 
 	def setForeignKey(self,primaryFile,theOtherOne):
-		pass"""
+		pass
 
 
-class Xf:
+class File1:
 	#max=25
 	#data={}
 	#stats  size,columns,runs,fingers,pkey,max,range
 	#stats=(size,columns,runs,fingers,pkey,max,range)
 	#stats={}
-	#stats = {}
 
-	def __init__(self,name):
+	def __init__(self):
 		self.stats={}
 		self.max=25
 		self.keyCol=None
 		self.stats["Name"]="Name_placeholder"
-		self.data={}
+		self.data=None
 		self.setStats(0,0,0,0,0,0)
 		pass
 
-	def setStats(self,size,columns,runs,fingers,pkey,max):   #set the status values
-		#print self 
-		#print type(self.stats)
+	def setStats(self,size,columns,runs,fingers,pkey,max):   #set the status values 
 		self.stats["size"]=size
 		self.stats["keyCol"]=pkey
 		self.stats["max"]=max
@@ -49,9 +54,6 @@ class Xf:
 		pass
 
 
-	def getSize(self):
-		return self.stats["size"]
-
 	def getVal(self,col,idx):
 		return self.data[str(col)][idx]
 
@@ -63,7 +65,7 @@ class Xf:
 		for col in range(self.stats["columns"]):
 			tuple1.append(self.data[str(col)][0])
 
-		#print str(self.stats["fingers"][col]) + "*"
+		print str(self.stats["fingers"][col]) + "*"
 
 		self.stats["fingers"][col]=0
 		return tuple1
@@ -73,17 +75,17 @@ class Xf:
 
 		#print self
 		fingerPos=self.stats["fingers"][col]
-		#print str(fingerPos) + "-" + str(len(self.data[str(0)])-2)
+		print str(fingerPos) + "-" + str(len(self.data[str(0)])-2)
 
 		if int(fingerPos)>=(len(self.data[str(0)])-2):
 			#self.stats["fingers"][col]=0
-			#print "yo"
+			print "yo"
 			return None
 
 		if self.stats["fingers"][col]!=-1 :
 			self.stats["fingers"][col]+=1
 
-		#print self.stats["fingers"][col]
+		print self.stats["fingers"][col]
 		
 
 		tuple1 =[]
@@ -98,41 +100,33 @@ class Xf:
 		pass
 
 	def emit(self,x):
-		#print "yo"
+		print "yo"
 		print x
 
 	def eJoin(self,S,m,n):
-		cost = 0
 		t1=self.getFirst(m)
-		cost += self.getSize() / 2
 		t2=S.getFirst(n)
-		cost += S.getSize() / 2
 
 		while t1 is not None:
-			#print str(t1[m]) + "=" + str(t2[n])
+			print str(t1[m]) + "=" + str(t2[n])
 			#print "x"
 			while t2 is not None:
-				#print str(t1[m]) + "=" + str(t2[n])
+				print str(t1[m]) + "=" + str(t2[n])
 				if t1[m]==t2[n]:
 					self.emit((t1,t2))
 				t2=S.getNext(n)
-				cost+=1
 
-			#print "vishnu"
+			print "vishnu"
 			t1=self.getNext(m)
-			cost+=1
 
-			#print str(t1) + "xx"
+			print str(t1) + "xx"
 			#if t2==None:
 			t2=S.getFirst(n)
-			cost+=S.getSize()/2
-
-		return cost
 		pass
 
-	#def __init__(self):
-	#	self.data={}
-	#	pass
+	def __init__(self):
+		self.data={}
+		pass
 
 	def __repr__(self):
 		t1=""
@@ -273,35 +267,30 @@ if len(sys.argv)>1:
 #inst2.readFile("file.txt")
 #print inst2
 
-inst3=Xf("r")
-
-
-
-inst3.setStats(20,2,(2,3),[-1,0],0,40)
+inst3=File1()
+inst3.setStats(10,2,(2,3),[-1,0],0,30)
 inst3.FormData()
 
 
-inst4=Xf("s")
-inst4.setStats(20,2,(2,3),[-1,0],0,40)
+inst4=File1()
+inst4.setStats(20,2,(2,3),[-1,0],0,30)
 inst4.FormData()
 
 print inst3
 print inst4
 
-#print inst3.getFirst(1)
-#print inst4.getFirst(1)
+print inst3.getFirst(1)
+print inst4.getFirst(1)
 
-#print inst3.getNext(1)
-#print inst4.getNext(1)
+print inst3.getNext(1)
+print inst4.getNext(1)
 
 
-#print inst3.getNext(1)
-#print inst4.getNext(1)
+print inst3.getNext(1)
+print inst4.getNext(1)
 
 
 #nJoin(inst3,inst4,1,1)
-
-print inst3.eJoin(inst4,1,1)
 
 """
 inst3.printStats()
