@@ -17,44 +17,151 @@ import sys
 
 class JoinReq:
 
-	def __init__(self,R,S,m,n):
+	def __init__(self,R,S,m,n,fing):
 		self.cost=0
 		self.first_req=True
 
 		self.cost = 0
-		tC,self.t1=self.getFirst(m)
+		tC,self.t1=R.getFirst(m)
 		#self.cost += tC
 		tC,self.t2=S.getFirst(n)
 		#self.cost += tC
 		self.first_req==False
 		self.R=R
 		self.S=S
+		self.m=m
+		self.n=n
+		self.fing=fing
 
 
 	def pull(self):
-		while self.t1 is not None:
-			#print str(t1[m]) + "=" + str(t2[n])
-			#print "x"
-			while self.t2 is not None:
+		if self.fing==False:
+			temp=""
+			while self.t1 is not None:
+
 				#print str(t1[m]) + "=" + str(t2[n])
-				if self.t1[m]==self.t2[n]:
-					self.emit((self.t1,self.t2))
-					return
-				self.t2=S.getNext(n)
+				#print "x"
+				while self.t2 is not None:
+					#print str(self.t1[self.m]) + "=" + str(self.t2[self.n])
+					if self.t1[self.m]==self.t2[self.n]:
+						#self.emit((self.t1,self.t2))
+						
+						temp= (self.t1,self.t2)
+						self.t2=self.S.getNext(self.n)
+						self.cost+=1
+						return temp
+
+					self.t2=self.S.getNext(self.n)
+					self.cost+=1
+
+
+				#print "vishnu"
+				self.t1=self.R.getNext(self.m)
 				self.cost+=1
 
-			#print "vishnu"
-			self.t1=self.R.getNext(m)
-			self.cost+=1
+				#print str(t1) + "xx"
+				#if t2==None:
+				tC,self.t2=self.S.getFirst(self.n)
+				self.cost+=tC
+			return "eoo"
+		else:
+			"""savedLastKey=-1
+			while self.t1 is not None:
+				if self.t1>=savedLastKey:
+					while self.t2 is not None:
+						if self.t1[self.m]==self.t2[self.n]:
+							#self.emit((self.t1,self.t2))
+						
+							temp= (self.t1,self.t2)
+							self.t2=self.S.getNext(self.n)
+							self.cost+=1
+							return temp
+						self.t2=self.S.getNext(self.n)
+						self.cost+=1
+				else:
+					tC,self.t2=self.S.getFirst(self.n)
+					self.cost+=tC
 
-			#print str(t1) + "xx"
-			#if t2==None:
-			tC,self.t2=self.S.getFirst(n)
-			self.cost+=tC
+					while self.t2 is not None:
+						if self.t1[self.m]==self.t2[self.n]:
+							#self.emit((self.t1,self.t2))
+						
+							temp= (self.t1,self.t2)
+							self.t2=self.S.getNext(self.n)
+							self.cost+=1
+							return temp
 
-		return cost
-		pass
+						self.t2=self.S.getNext(self.n)
+						self.cost+=1
 
+
+				savedLastKey=self.t1
+
+				self.t1=self.R.getNext(self.m)
+				self.cost+=1
+			return "eoo" """
+
+			savedLastKey=-1
+
+			while self.t1 is not None:
+
+
+				while self.t1 is not None: 			
+					while self.t2 is not None and self.t1[self.m]>=self.t2[self.n]:
+						#print str(self.t1[self.m]) + "=" + str(self.t2[self.n])
+						if self.t1[self.m]==self.t2[self.n]:
+						#self.emit((self.t1,self.t2))
+							temp= (self.t1,self.t2)
+							self.t2=self.S.getNext(self.n)
+							self.cost+=1
+							return temp
+							
+						self.t2=self.S.getNext(self.n)
+						self.cost+=1
+
+					if self.t2 is None:
+						#print "t2 go non"
+						while self.t1 is not None:
+							self.t1=self.R.getNext(self.m)
+							self.cost+=1
+							if savedLastKey>self.t1[self.m]:
+								tC,self.t2=self.S.getFirst(self.n)
+								print tC
+								self.cost+=tC
+								break
+							
+					if self.t2[self.n]>self.t1[self.m]:
+						break
+
+				while self.t2 is not None: 			
+					while self.t1 is not None and self.t2[self.n]>=self.t1[self.m]:
+						#print str(self.t1[self.m]) + "=" + str(self.t2[self.n])
+						if self.t1[self.m]==self.t2[self.n]:
+						#self.emit((self.t1,self.t2))
+							temp= (self.t1,self.t2)
+							self.t2=self.S.getNext(self.n)
+							self.cost+=1
+							return temp
+						
+						savedLastKey=self.t1[self.m]
+						self.t1=self.R.getNext(self.m)
+						self.cost+=1
+
+						if self.t1 is None:
+							return "eoo"
+						if savedLastKey>self.t1[self.m]:
+							tC,self.t2=self.S.getFirst(self.n)
+							print tC
+							self.cost+=tC
+							#print self.t2
+
+					if self.t1[self.m]>self.t2[self.n]:
+						break
+			return "eoo"
+
+
+	def getCost(self):
+		return self.cost
 
 
 class Xf:
@@ -69,12 +176,12 @@ class Xf:
 		self.stats={}
 		self.max=25
 		self.keyCol=None
-		self.stats["Name"]="Name_placeholder"
+		self.stats["Name"]=name
 		self.data={}
-		self.setStats(0,0,0,0,0,0)
+		self.setStats(0,0,0,0,0,0,0)
 		pass
 
-	def setStats(self,size,columns,runs,fingers,pkey,max):   #set the status values
+	def setStats(self,size,columns,runs,fingers,ordered,pkey,max):   #set the status values
 		#print self 
 		#print type(self.stats)
 		self.stats["size"]=size
@@ -87,12 +194,22 @@ class Xf:
 		self.keyCol=self.stats["keyCol"]
 		self.max=self.stats["max"]
 		self.stats["fingers"]=fingers
+		self.stats["ordered"]=ordered
 		self.fingers=fingers
 		pass
 
+	def sortCol(self):
+		pass
+
+	def reset(self):
+		self.stats["fingers"]=[0 if x!=-1 else x for x in self.stats["fingers"]]
+
 
 	def getSize(self):
-		return self.stats["size"]
+		return int(self.stats["size"])
+
+	def getRuns(self,col):
+		return int(self.stats["runs"][col])
 
 
 	def getFirst(self,col):
@@ -103,8 +220,11 @@ class Xf:
 		#print str(self.stats["fingers"][col]) + "*"
 
 		tCost = self.stats["fingers"][col]
-		print tCost
+		#print tCost
 		self.stats["fingers"][col]=0
+
+		#if self.stats["Name"] == "s":
+		#print "getFrist " + self.stats["Name"] + str(tuple1[col])
 		return tCost, tuple1
 		pass
 
@@ -128,6 +248,10 @@ class Xf:
 		tuple1 =[]
 		for col in range(self.stats["columns"]):
 			tuple1.append(self.data[str(col)][fingerPos])
+
+		#if self.stats["Name"] == "s":
+		#print "getNext " + self.stats["Name"]+ str(tuple1[col])
+
 		return tuple1
 		pass
 
@@ -269,7 +393,6 @@ class Xf:
 					#print temp
 					self.data[str(col)]=self.replaceDupandSum(self.data.get(str(col),[]),temp)
 				#self.data[str(col)]=set(self.data[str(col)])
-
 				#print self.data[str(col)]
 
 
@@ -277,6 +400,9 @@ class Xf:
 				for r in range(runs[col]):
 					temp=sorted([random.randrange(self.max) for x in range(size/runs[col])])
 					self.data[str(col)]=self.data.get(str(col),[])+temp
+
+			if self.stats["ordered"][col]==True:
+				self.data[str(col)]=sorted(self.data[str(col)])
 
 	def write2File(self,fileName):
 		fp = open(fileName,'w')
