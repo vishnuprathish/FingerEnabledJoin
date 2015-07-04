@@ -7,18 +7,19 @@ from plotgraph import *
 def run():
 	records = random.randrange(200, 1000)
 	inst3=Xf("r")
-	inst3.setStats(records,2,(2,2),[-1,0],[False,False],0,40000, 10)
+	inst3.setStats(records,2,(2,40),[-1,0],[False,False],0,40000, 10)
 	inst3.FormData()
 
 	inst4=Xf("s")
-	inst4.setStats(records,2,(2,2),[-1,0],[False,True],0,40000, 10)
+	inst4.setStats(records,2,(1,1),[-1,0],[False,True],0,40000, 10)
 	inst4.FormData()
 
 	print inst3
 	print inst4
 
 	pCost = inst3.getSize() + (inst4.getSize() * inst3.getRuns(1) )+ (inst3.getRuns(1) * inst4.getSize())
-	pCost = 0.6 * pCost
+	pCost = inst3.getSize() + (inst4.getSize() * inst3.getRuns(1) )+ (inst3.getRuns(1) * inst4.getSize())	
+	#pCost = 0.6 * pCost
 
 
 	j=JoinReq(inst3,inst4,1,1,True)
@@ -79,7 +80,7 @@ for i in range(200):
 	predicted, actual, size = run()
 	arrPredicted.append(predicted)
 	arrActual.append(actual)
-	arrSize.append(size * size)
+	arrSize.append(size + size)
 
 
 print arrActual
