@@ -3,6 +3,20 @@
 import random
 import sys
 
+"""class schema:
+
+	files=[]
+
+	def __init__(self):
+		pass
+
+	def addFile(self,file):
+		self.files.append(file)
+
+	def setForeignKey(self,primaryFile,theOtherOne):
+		pass"""
+
+
 class JoinReq:
 
 	def __init__(self,R,S,m,n,fing):
@@ -20,7 +34,6 @@ class JoinReq:
 		self.m=m
 		self.n=n
 		self.fing=fing
-		
 
 
 	def pull(self):
@@ -54,13 +67,53 @@ class JoinReq:
 				self.cost+=tC
 			return "eoo"
 		else:
+			"""savedLastKey=-1
+			while self.t1 is not None:
+				if self.t1>=savedLastKey:
+					while self.t2 is not None:
+						if self.t1[self.m]==self.t2[self.n]:
+							#self.emit((self.t1,self.t2))
+						
+							temp= (self.t1,self.t2)
+							self.t2=self.S.getNext(self.n)
+							self.cost+=1
+							return temp
+						self.t2=self.S.getNext(self.n)
+						self.cost+=1
+				else:
+					tC,self.t2=self.S.getFirst(self.n)
+					self.cost+=tC
+
+					while self.t2 is not None:
+						if self.t1[self.m]==self.t2[self.n]:
+							#self.emit((self.t1,self.t2))
+						
+							temp= (self.t1,self.t2)
+							self.t2=self.S.getNext(self.n)
+							self.cost+=1
+							return temp
+
+						self.t2=self.S.getNext(self.n)
+						self.cost+=1
+
+
+				savedLastKey=self.t1
+
+				self.t1=self.R.getNext(self.m)
+				self.cost+=1
+			return "eoo" """
+
 			savedLastKey=-1
 
 			while self.t1 is not None:
+
+
 				while self.t1 is not None: 			
 					while self.t2 is not None and self.t1[self.m]>=self.t2[self.n]:
+						#print str(self.t1[self.m]) + "=" + str(self.t2[self.n])
 						if self.t1[self.m]==self.t2[self.n]:
-							temp = (self.t1, self.t2)
+						#self.emit((self.t1,self.t2))
+							temp= (self.t1,self.t2)
 							self.t2=self.S.getNext(self.n)
 							self.cost+=1
 							return temp
@@ -69,32 +122,30 @@ class JoinReq:
 						self.cost+=1
 
 					if self.t2 is None:
+						#print "t2 go non"
 						while self.t1 is not None:
 							self.t1=self.R.getNext(self.m)
-							if self.t1 == None:
-								break
 							self.cost+=1
 							if savedLastKey>self.t1[self.m]:
 								tC,self.t2=self.S.getFirst(self.n)
 								#print tC
 								self.cost+=tC
 								break
-					
-					if self.t1 == None:
-						break		
+							
 					if self.t2[self.n]>self.t1[self.m]:
 						break
 
 				while self.t2 is not None: 			
 					while self.t1 is not None and self.t2[self.n]>=self.t1[self.m]:
+						#print str(self.t1[self.m]) + "=" + str(self.t2[self.n])
 						if self.t1[self.m]==self.t2[self.n]:
-							temp = (self.t1, self.t2)
-							self.t2 = self.S.getNext(self.n)
-							self.cost += 1
+						#self.emit((self.t1,self.t2))
+							temp= (self.t1,self.t2)
+							self.t2=self.S.getNext(self.n)
+							self.cost+=1
 							return temp
 						
-						if self.t1[self.m] is not None:
-							savedLastKey=self.t1[self.m]
+						savedLastKey=self.t1[self.m]
 						self.t1=self.R.getNext(self.m)
 						self.cost+=1
 
@@ -116,6 +167,12 @@ class JoinReq:
 
 
 class Xf:
+	#max=25
+	#data={}
+	#stats  size,columns,runs,fingers,pkey,max,range
+	#stats=(size,columns,runs,fingers,pkey,max,range)
+	#stats={}
+	#stats = {}
 
 	def __init__(self,name):
 		self.stats={}
@@ -123,11 +180,10 @@ class Xf:
 		self.keyCol=None
 		self.stats["Name"]=name
 		self.data={}
-		self.setStats(0,0,0,0,0,0,0, 0)
-		self.keys = 0
+		self.setStats(0,0,0,0,0,0,0)
 		pass
 
-	def setStats(self,size,columns,runs,fingers,ordered,pkey,max, keys):   #set the status values #fix keys ... same number of keys for every value
+	def setStats(self,size,columns,runs,fingers,ordered,pkey,max):   #set the status values
 		#print self 
 		#print type(self.stats)
 		self.stats["size"]=size
@@ -142,7 +198,6 @@ class Xf:
 		self.stats["fingers"]=fingers
 		self.stats["ordered"]=ordered
 		self.fingers=fingers
-		self.keys = keys
 		pass
 
 	def sortCol(self):
@@ -333,26 +388,22 @@ class Xf:
 	def Generate(self,cols,runs,size):
 
 		for col in range(cols):
-			if col == self.keyCol:  #primary key not handled
+			if col == self.keyCol:
 				#print "key" + str(col)
-				#print runs
+				print runs
 				for r in range(runs[col]):
 					temp=sorted(random.sample(range(self.max),size/runs[col]))
-					#include add sufficient duplicates per run
-					keys_per_run = self.keys/runs[col]
-					duplicates_per_run = len(temp) - keys_per_run
-					
-					while duplicates_per_run > 0 :
-					    random_pos = random.randrange(1, len(temp))
-					    temp[random_pos - 1] = temp[random_pos]
-					    duplicates_per_run = duplicates_per_run - 1
-					
-					self.data[str(col)]=self.data.get(str(col),[])+temp
+					#print temp
+					self.data[str(col)]=self.replaceDupandSum(self.data.get(str(col),[]),temp)
+				#self.data[str(col)]=set(self.data[str(col)])
+				#print self.data[str(col)]
+
+
 			else:
 				for r in range(runs[col]):
 					temp=sorted([random.randrange(self.max) for x in range(size/runs[col])])
 					self.data[str(col)]=self.data.get(str(col),[])+temp
-					
+
 			if self.stats["ordered"][col]==True:
 				self.data[str(col)]=sorted(self.data[str(col)])
 
@@ -398,4 +449,71 @@ def nJoin(R,S,m,n):
 
 
 
+#Generate(3,[3,3,3],9)
 
+"""inst= file()
+if len(sys.argv)>1:
+	cols = int(sys.argv[1])
+	runs = [int(x) for x in sys.argv[2:(len(sys.argv)-1)]]
+	size = int(sys.argv[len(sys.argv)-1])
+
+
+#print inst.replaceDupandSum([1,6,9,12],[2,5,6,11])
+
+
+	inst.setConstraints(0,200000)
+	inst.Generate(cols,runs,size)
+	inst.write2File("file.txt")
+
+	"""
+#inst2=file()
+#inst2.readFile("file.txt")
+#print inst2
+"""
+inst3=Xf("r")
+
+
+
+inst3.setStats(10,2,(2,3),[-1,0],0,40)
+inst3.FormData()
+
+
+inst4=Xf("s")
+inst4.setStats(20,2,(2,3),[-1,0],0,40)
+inst4.FormData()
+
+print inst3
+print inst4
+"""
+
+#print inst3.getFirst(1)
+#print inst4.getFirst(1)
+
+#print inst3.getNext(1)
+#print inst4.getNext(1)
+
+
+#print inst3.getNext(1)
+#print inst4.getNext(1)
+
+
+#nJoin(inst3,inst4,1,1)
+
+#print inst3.eJoin(inst4,1,1)
+
+"""
+inst3.printStats()
+
+print inst3.getFirst()
+
+print inst3.getNext(1)
+print inst3.getNext(1)
+print inst3.getNext(1)
+print inst3.getNext(1)
+print inst3.getNext(1)"""
+
+
+
+
+
+#print inst

@@ -2,28 +2,24 @@ from fingered import *
 import random
 import csv
 import sys
+from plotgraph import *
 
-def caac():
-	records = random.randrange(200,500)
+def run():
+	records = random.randrange(200, 1000)
 	inst3=Xf("r")
-	inst3.setStats(records,2,(2,records/10),[-1,0],[False,False],0,40000)
+	inst3.setStats(records,2,(2,2),[-1,0],[False,False],0,40000, 10)
 	inst3.FormData()
 
 	inst4=Xf("s")
-	inst4.setStats(100,2,(2,10),[-1,0],[False,True],0,40000)
+	inst4.setStats(records,2,(2,2),[-1,0],[False,True],0,40000, 10)
 	inst4.FormData()
 
 	print inst3
 	print inst4
 
-	#print "Predicted Cost of Fingered Join from Stats: "
-	#print "recorSize of file1=" + str(records)
-
 	pCost = inst3.getSize() + (inst4.getSize() * inst3.getRuns(1) )+ (inst3.getRuns(1) * inst4.getSize())
+	pCost = 0.6 * pCost
 
-	#print pCost
-	#print inst3.eJoin(inst4,1,1)
-	#print "\n Fingered Join:"
 
 	j=JoinReq(inst3,inst4,1,1,True)
 
@@ -32,10 +28,6 @@ def caac():
 		#print str(tup)
 
 		tup=j.pull()
-
-	#print "Cost : "  + str(j.getCost())
-
-
 
 	"""
 	print "\nNested Loop Join:\n"
@@ -69,14 +61,30 @@ def caac():
 	tup = [ str(records), str(inst3.getRuns(1)),str(inst4.getSize()),str(pCost),str(j.getCost())]
 	print tup
 
-
-	fp = open("toexcel.csv","ab")
-
-	writer = csv.writer(fp)
-	data = [tup]
-	writer.writerows(data)
+	return pCost, j.getCost(), records
 
 
+	#fp = open("toexcel.csv","ab")
 
-for i in range(2):
-	caac()
+	#writer = csv.writer(fp)
+	#data = [tup]
+	#writer.writerows(data)
+
+
+arrPredicted = []
+arrActual = []
+arrSize = []
+
+for i in range(200):
+	predicted, actual, size = run()
+	arrPredicted.append(predicted)
+	arrActual.append(actual)
+	arrSize.append(size * size)
+
+
+print arrActual
+print arrPredicted
+#chartPlot3(arrActual, arrPredicted, arrSize)
+chartPlot3(sorted(arrActual), sorted(arrPredicted), sorted(arrSize))
+
+

@@ -1,6 +1,5 @@
 import random
 import sys
-#import file
 
 #print file.__file__
 
