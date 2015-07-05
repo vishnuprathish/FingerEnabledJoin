@@ -27,31 +27,17 @@ class JoinReq:
 		if self.fing==False:
 			temp=""
 			while self.t1 is not None:
-
-				#print str(t1[m]) + "=" + str(t2[n])
-				#print "x"
 				while self.t2 is not None:
-					#print str(self.t1[self.m]) + "=" + str(self.t2[self.n])
-					if self.t1[self.m]==self.t2[self.n]:
-						#self.emit((self.t1,self.t2))
-						
+					if self.t1[self.m]==self.t2[self.n]:						
 						temp= (self.t1,self.t2)
 						self.t2=self.S.getNext(self.n)
 						self.cost+=1
 						return temp
-
 					self.t2=self.S.getNext(self.n)
 					self.cost+=1
-
-
-				#print "vishnu"
 				self.t1=self.R.getNext(self.m)
 				self.cost+=1
-
-				#print str(t1) + "xx"
-				#if t2==None:
 				tC,self.t2=self.S.getFirst(self.n)
-				self.cost+=tC
 			return "eoo"
 		else:
 			savedLastKey=-1
@@ -77,7 +63,7 @@ class JoinReq:
 							if savedLastKey>self.t1[self.m]:
 								tC,self.t2=self.S.getFirst(self.n)
 								#print tC
-								self.cost+=tC
+								#self.cost+=tC
 								break
 					
 					if self.t1 == None:
@@ -103,7 +89,7 @@ class JoinReq:
 						if savedLastKey>self.t1[self.m]:
 							tC,self.t2=self.S.getFirst(self.n)
 							#print tC
-							self.cost+=tC
+							#self.cost+=tC
 							#print self.t2
 
 					if self.t1[self.m]>self.t2[self.n]:
@@ -215,9 +201,9 @@ class Xf:
 	def eJoin(self,S,m,n):
 		cost = 0
 		tC,t1=self.getFirst(m)
-		cost += tC
+		#cost += tC
 		tC,t2=S.getFirst(n)
-		cost += tC
+		#cost += tC
 
 		while t1 is not None:
 			#print str(t1[m]) + "=" + str(t2[n])
@@ -244,9 +230,9 @@ class Xf:
 	def eJoin_pull(self,S,m,n):
 		cost = 0
 		tC,t1=self.getFirst(m)
-		cost += tC
+		#cost += tC
 		tC,t2=S.getFirst(n)
-		cost += tC
+		#cost += tC
 
 		while t1 is not None:
 			#print str(t1[m]) + "=" + str(t2[n])
@@ -265,7 +251,7 @@ class Xf:
 			#print str(t1) + "xx"
 			#if t2==None:
 			tC,t2=S.getFirst(n)
-			cost+=tC
+			#cost+=tC
 
 		return cost
 		pass
@@ -309,24 +295,6 @@ class Xf:
 		pass
 
 	def FormData(self):
-		"""		for col in range(self.cols):
-			if col == self.keyCol:
-				#print "key" + str(col)
-				#print runs
-				for r in range(self.runs[col]):
-					temp=sorted(random.sample(range(self.max),size/runs[col]))
-					#print temp
-					self.data[str(col)]=self.replaceDupandSum(self.data.get(str(col),[]),temp)
-				#self.data[str(col)]=set(self.data[str(col)])
-
-				#print self.data[str(col)]
-
-
-			else:
-				for r in range(self.runs[col]):
-					temp=sorted([random.randrange(self.max) for x in range(size/runs[col])])
-					self.data[str(col)]=self.data.get(str(col),[])+temp"""
-
 		self.Generate(self.stats["columns"],self.stats["runs"],self.stats["size"])
 
 
@@ -388,7 +356,6 @@ def nJoin(R,S,m,n):
 				R.emit((t1,t2))
 			t2=S.getNext(n)
 
-		print "vishnu"
 		t1=R.getNext(m)
 
 		print str(t1) + "xx"
