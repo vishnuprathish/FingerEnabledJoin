@@ -5,13 +5,13 @@ import sys
 from plotgraph import *
 
 def run():
-	records = random.randrange(200, 1000)
+	records = random.randrange(200, 5000)
 	inst3=Xf("r")
-	inst3.setStats(records,2,(2,40),[-1,0],[False,False],0,100000, 10)
+	inst3.setStats(records,2,(2, random.randrange(50, 2999)),[-1,0],[False,False],0,100000, records)
 	inst3.FormData()
 
 	inst4=Xf("s")
-	inst4.setStats(records,2,(1,1),[-1,0],[False,True],0,100000, 10)
+	inst4.setStats(records,2,(1,1),[-1,0],[False,True],0,100000, records)
 	inst4.FormData()
 
 	print inst3
@@ -73,20 +73,24 @@ arrSize = []
 arrNested = []
 arrsysR = []
 
-for i in range(20):
+for i in range(2000):
 	predicted, actual, nested, sysR, size = run()
 	arrPredicted.append(predicted)
 	arrActual.append(actual)
-	arrSize.append(size + size)
+	arrSize.append(size * size)
 	arrNested.append(nested)
 	arrsysR.append(sysR)
 
 
 print arrActual
 print arrPredicted
-#chartPlot3(arrActual, arrPredicted, arrSize)
+chartPlot3(sorted(arrsysR), sorted(arrNested), sorted(arrSize), "System R Cost equation", "Nested loop Empirical cost", "SysR vs Nested")
+chartPlot3(sorted(arrsysR), sorted(arrActual), sorted(arrSize), "System R Cost equation", "Finger enabled empirical cost", "SysR vs Finger")
+chartPlot3(sorted(arrPredicted), sorted(arrActual), sorted(arrSize), "Predicted cost using new cost formula", "Finger enabled empirical cost", "New vs finger")
+
+
 #chartPlot3(sorted(arrActual), sorted(arrPredicted), sorted(arrSize))
 #plot4(sorted(arrActual), sorted(arrPredicted), sorted(arrNested), sorted(arrSize))
-plot5(sorted(arrActual), sorted(arrPredicted), sorted(arrNested), sorted(arrsysR), sorted(arrSize))
+#plot5(sorted(arrActual), sorted(arrPredicted), sorted(arrNested), sorted(arrsysR), sorted(arrSize))
 
 

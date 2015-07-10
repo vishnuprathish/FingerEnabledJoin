@@ -29,7 +29,7 @@ class JoinReq:
 			while self.t1 is not None:
 				while self.t2 is not None:
 					if self.t1[self.m]==self.t2[self.n]:						
-						temp= (self.t1,self.t2)
+						temp = (self.t1,self.t2)
 						self.t2=self.S.getNext(self.n)
 						self.cost+=1
 						return temp
