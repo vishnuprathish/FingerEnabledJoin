@@ -11,17 +11,13 @@ class JoinReq:
 
 		self.cost = 0
 		tC,self.t1=R.getFirst(m)
-		#self.cost += tC
 		tC,self.t2=S.getFirst(n)
-		#self.cost += tC
 		self.first_req==False
 		self.R=R
 		self.S=S
 		self.m=m
 		self.n=n
 		self.fing=fing
-		
-
 
 	def pull(self):
 		if self.fing==False:
@@ -62,8 +58,6 @@ class JoinReq:
 							self.cost+=1
 							if savedLastKey>self.t1[self.m]:
 								tC,self.t2=self.S.getFirst(self.n)
-								#print tC
-								#self.cost+=tC
 								break
 					
 					if self.t1 == None:
@@ -88,10 +82,6 @@ class JoinReq:
 							return "eoo"
 						if savedLastKey>self.t1[self.m]:
 							tC,self.t2=self.S.getFirst(self.n)
-							#print tC
-							#self.cost+=tC
-							#print self.t2
-
 					if self.t1[self.m]>self.t2[self.n]:
 						break
 			return "eoo"
@@ -114,8 +104,6 @@ class Xf:
 		pass
 
 	def setStats(self,size,columns,runs,fingers,ordered,pkey,max, keys):   #set the status values #fix keys ... same number of keys for every value
-		#print self 
-		#print type(self.stats)
 		self.stats["size"]=size
 		self.stats["keyCol"]=pkey
 		self.stats["max"]=max
@@ -150,40 +138,23 @@ class Xf:
 		for col in range(self.stats["columns"]):
 			tuple1.append(self.data[str(col)][0])
 
-		#print str(self.stats["fingers"][col]) + "*"
-
 		tCost = self.stats["fingers"][col]
-		#print tCost
 		self.stats["fingers"][col]=0
 
-		#if self.stats["Name"] == "s":
-		#print "getFrist " + self.stats["Name"] + str(tuple1[col])
 		return tCost, tuple1
 		pass
 
 	def getNext(self,col):
-
-		#print self
 		fingerPos=self.stats["fingers"][col]
-		#print str(fingerPos) + "-" + str(len(self.data[str(0)])-2)
-
 		if int(fingerPos)>=(len(self.data[str(col)])-2):
-			#self.stats["fingers"][col]=0
-			#print "yo"
 			return None
 
 		if self.stats["fingers"][col]!=-1 :
-			self.stats["fingers"][col]+=1
-
-		#print self.stats["fingers"][col]
-		
+			self.stats["fingers"][col]+=1		
 
 		tuple1 =[]
 		for col in range(self.stats["columns"]):
 			tuple1.append(self.data[str(col)][fingerPos])
-
-		#if self.stats["Name"] == "s":
-		#print "getNext " + self.stats["Name"]+ str(tuple1[col])
 
 		return tuple1
 		pass
@@ -327,7 +298,6 @@ class Xf:
 	def write2File(self,fileName):
 		fp = open(fileName,'w')
 		for col in range(cols):
-			#print self.data[str(col)]
 			stringD=""
 			for x in self.data[str(col)]:
 				stringD=stringD+" "+ str(x)
@@ -348,18 +318,12 @@ def nJoin(R,S,m,n):
 	t2=S.getFirst(n)
 
 	while t1 is not None:
-		print str(t1[m]) + "=" + str(t2[n])
-		#print "x"
 		while t2 is not None:
-			print str(t1[m]) + "=" + str(t2[n])
 			if t1[m]==t2[n]:
 				R.emit((t1,t2))
 			t2=S.getNext(n)
 
 		t1=R.getNext(m)
-
-		print str(t1) + "xx"
-		#if t2==None:
 		t2=S.getFirst(n)
 	pass
 

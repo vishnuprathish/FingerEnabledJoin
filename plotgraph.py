@@ -13,21 +13,41 @@ def chartPlot(x1, x2, text1 = "test", text2 = "test"):
     plt.plot([a for a in range(0, len(x2))], x2, 'g')
     plt.show()
 
-def chartPlot3(x1, x2, y, text1 = "test", text2 = "test", title="test"):
+def chartPlot3(x1, x2, y, text1 = "test", text2 = "test", title="test", argymax = 1000000):
     red_patch = mpatches.Patch(color='red', label=text1)
     green_patch = mpatches.Patch(color='green', label=text2)
     plt.legend(handles=[red_patch, green_patch], loc='best')
     plt.ylabel("Cost")
     plt.xlabel("Size(I) x Size(R)")
-    plt.ylim(ymin = 0, ymax = 1000000)
-    plt.plot(y, x1,'r')
-    plt.plot(y, x2,'g')
+    plt.ylim(ymin = 0, ymax = argymax)
+    plt.plot(y, x1,'r^')
+    plt.plot(y, x2,'gs')
+    plt.savefig(title+".png")
+    plt.show()
+
+def chartPlot4(x1, x2, y, text1 = "test", text2 = "test", title="test", ymax = 1000000):
+    red_patch = mpatches.Patch(color='red', label=text1)
+    green_patch = mpatches.Patch(color='green', label=text2)
+    plt.legend(handles=[red_patch, green_patch], loc='best')
+    plt.ylabel("Cost")
+    plt.xlabel("Size(I) x Size(R)")
+    #plt.ylim(ymin = 0, ymax = 1000000)
+    plt.plot(y, x1,'r^')
+    plt.plot(y, x2,'gs')
+    plt.savefig(title+".png")
+    plt.show()
+
+def dataDist(y, text1 = "Count", text2 = "Average record Size", title="Distribution of Runs"):
+    red_patch = mpatches.Patch(color='red', label=text1)
+    green_patch = mpatches.Patch(color='green', label=text2)
+    plt.legend(handles=[red_patch, green_patch], loc='best')
+    plt.ylabel("Cost")
+    plt.xlabel("Size(I) x Size(R)")
+    plt.plot(y, [x for x in range(0, len(y))],'g^')
     plt.savefig(title+".png")
     plt.show()
 
 def plot4(x1, x2, x3, y):
-    #red_patch = mpatches.Patch(color='red', label=text1)
-    #green_patch = mpatches.Patch(color='red', label=text2)
     plt.ylabel("Cost")
     plt.xlabel("Size(I) x Size(R)")
     plt.plot(y, x1,'r')
@@ -36,8 +56,6 @@ def plot4(x1, x2, x3, y):
     plt.show()
 
 def plot5(x1, x2, x3, x4, y):
-    #red_patch = mpatches.Patch(color='red', label=text1)
-    #green_patch = mpatches.Patch(color='red', label=text2)
     plt.ylabel("Cost")
     plt.xlabel("Size(I) x Size(R)")
     plt.plot(y, x1,'r')
@@ -51,6 +69,3 @@ x1 =[10000,20000,30400,40000,50000]
 x2 =[10000,20000,30000,40000,50000]
 x3 =[5000,15000,25000,35000,45000]
 x4 =[2000,12000,22000,32000,42000]
-
-
-#chartPlot(x1,x2)
